@@ -3,9 +3,9 @@ package main
 import (
 	"log"
 
-	"github.com/Real-Dev-Squad/tiny-site-backend/initializers"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/vinit717/tiny-site-backend/initializers"
 )
 
 func init() {
