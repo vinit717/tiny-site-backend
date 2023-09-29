@@ -1,11 +1,32 @@
 package main
 
 import (
-	"net/http"
-	"url-shortener/routes"
+	"log"
+
+	"github.com/Real-Dev-Squad/tiny-site-backend/initializers"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
+func init() {
+	config, err := initializers.LoadConfig(".")
+	if err != nil {
+		log.Fatalln("Failed to load environment variables! \n", err.Error())
+	}
+	initializers.ConnectDB(&config)
+}
+
 func main() {
-	http.HandleFunc("/", routes.MainHandler)
-	http.ListenAndServe(":8080", nil)
+	app := fiber.New()
+
+	app.Use(logger.New())
+
+	app.Get("/api/healthchecker", func(c *fiber.Ctx) error {
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{
+			"status":  "success",
+			"message": "Welcome to Golang, Fiber, and GORM",
+		})
+	})
+
+	log.Fatal(app.Listen(":8000"))
 }
