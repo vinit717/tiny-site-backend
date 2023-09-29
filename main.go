@@ -5,7 +5,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
-	"github.com/vinit717/tiny-site-backend/initializers"
+	"github.com/tiny-site-backend/initializers"
 )
 
 func init() {
