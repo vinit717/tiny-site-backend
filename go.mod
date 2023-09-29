@@ -1,4 +1,4 @@
-module url-shortener
+module tiny-site-backend
 
 go 1.21.0
 
