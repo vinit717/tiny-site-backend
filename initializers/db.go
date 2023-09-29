@@ -5,7 +5,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/tiny-site-backend/models"
+	"tiny-site-backend/models"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
