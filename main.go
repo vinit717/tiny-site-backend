@@ -40,7 +40,7 @@ func main() {
 		router.Get("/logout", middleware.DeserializeUser, controllers.LogoutUser)
 	})
 
-	micro.Get("/users/me", middleware.DeserializeUser, controllers.GetMe)
+	micro.Get("/users/self", middleware.DeserializeUser, controllers.GetMe)
 
 	micro.Get("/healthchecker", func(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{

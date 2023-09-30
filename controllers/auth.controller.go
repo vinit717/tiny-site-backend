@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"tiny-site-backend/initializers"
-
 	"tiny-site-backend/models"
 
 	"github.com/gofiber/fiber/v2"
@@ -24,25 +23,24 @@ func SignUpUser(c *fiber.Ctx) error {
 	errors := models.ValidateStruct(payload)
 	if errors != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "fail", "errors": errors})
-
 	}
 
 	if payload.Password != payload.PasswordConfirm {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "fail", "message": "Passwords do not match"})
-
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(payload.Password), bcrypt.DefaultCost)
-
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "fail", "message": err.Error()})
 	}
 
 	newUser := models.User{
-		Name:     payload.Name,
-		Email:    strings.ToLower(payload.Email),
-		Password: string(hashedPassword),
-		Photo:    &payload.Photo,
+		FirstName: payload.FirstName,
+		LastName:  payload.LastName,
+		Username:  payload.Username,
+		Email:     strings.ToLower(payload.Email),
+		Password:  string(hashedPassword),
+		Photo:     &payload.Photo,
 	}
 
 	result := initializers.DB.Create(&newUser)
@@ -66,18 +64,17 @@ func SignInUser(c *fiber.Ctx) error {
 	errors := models.ValidateStruct(payload)
 	if errors != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(errors)
-
 	}
 
 	var user models.User
-	result := initializers.DB.First(&user, "email = ?", strings.ToLower(payload.Email))
+	result := initializers.DB.First(&user, "username = ?", payload.Username)
 	if result.Error != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "fail", "message": "Invalid email or Password"})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "fail", "message": "Invalid username or Password"})
 	}
 
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(payload.Password))
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "fail", "message": "Invalid email or Password"})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "fail", "message": "Invalid username or Password"})
 	}
 
 	config, _ := initializers.LoadConfig(".")
@@ -102,7 +99,7 @@ func SignInUser(c *fiber.Ctx) error {
 		Name:     "token",
 		Value:    tokenString,
 		Path:     "/",
-		MaxAge:   config.JwtMaxAge * 60,
+		MaxAge:   config.JwtMaxAge,
 		Secure:   false,
 		HTTPOnly: true,
 		Domain:   "localhost",

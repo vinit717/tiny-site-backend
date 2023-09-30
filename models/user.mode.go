@@ -9,37 +9,38 @@ import (
 
 type User struct {
 	ID        *uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4();primary_key"`
-	Name      string     `gorm:"type:varchar(100);not null"`
+	FirstName string     `gorm:"type:varchar(100);not null"`
+	LastName  string     `gorm:"type:varchar(100);not null"`
+	Username  string     `gorm:"type:varchar(100);uniqueIndex;not null"`
 	Email     string     `gorm:"type:varchar(100);uniqueIndex;not null"`
 	Password  string     `gorm:"type:varchar(100);not null"`
-	Role      *string    `gorm:"type:varchar(50);default:'user';not null"`
-	Provider  *string    `gorm:"type:varchar(50);default:'local';not null"`
 	Photo     *string    `gorm:"not null;default:'default.png'"`
-	Verified  *bool      `gorm:"not null;default:false"`
 	CreatedAt *time.Time `gorm:"not null;default:now()"`
 	UpdatedAt *time.Time `gorm:"not null;default:now()"`
 }
 
 type SignUpInput struct {
-	Name            string `json:"name" validate:"required"`
+	FirstName       string `json:"first_name" validate:"required"`
+	LastName        string `json:"last_name" validate:"required"`
+	Username        string `json:"username" validate:"required"`
 	Email           string `json:"email" validate:"required"`
 	Password        string `json:"password" validate:"required,min=8"`
-	PasswordConfirm string `json:"passwordConfirm" validate:"required,min=8"`
+	PasswordConfirm string `json:"password_confirm" validate:"required,min=8"`
 	Photo           string `json:"photo"`
 }
 
 type SignInInput struct {
-	Email    string `json:"email"  validate:"required"`
-	Password string `json:"password"  validate:"required"`
+	Username string `json:"username" validate:"required"`
+	Password string `json:"password" validate:"required"`
 }
 
 type UserResponse struct {
 	ID        uuid.UUID `json:"id,omitempty"`
-	Name      string    `json:"name,omitempty"`
+	FirstName string    `json:"first_name,omitempty"`
+	LastName  string    `json:"last_name,omitempty"`
+	Username  string    `json:"username,omitempty"`
 	Email     string    `json:"email,omitempty"`
-	Role      string    `json:"role,omitempty"`
 	Photo     string    `json:"photo,omitempty"`
-	Provider  string    `json:"provider"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
@@ -47,11 +48,11 @@ type UserResponse struct {
 func FilterUserRecord(user *User) UserResponse {
 	return UserResponse{
 		ID:        *user.ID,
-		Name:      user.Name,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+		Username:  user.Username,
 		Email:     user.Email,
-		Role:      *user.Role,
 		Photo:     *user.Photo,
-		Provider:  *user.Provider,
 		CreatedAt: *user.CreatedAt,
 		UpdatedAt: *user.UpdatedAt,
 	}
