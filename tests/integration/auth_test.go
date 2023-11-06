@@ -3,41 +3,48 @@ package tests
 import (
 	"fmt"
 	"io"
+	"log"
+
+	// "log"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"testing"
+	"tiny-site-backend/initializers"
 	"tiny-site-backend/routes"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
-	"github.com/joho/godotenv"
+
+	// "github.com/joho/godotenv"
 	"github.com/stretchr/testify/assert"
-	"gorm.io/driver/postgres"
+	// "gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 var testDB *gorm.DB
 
 func TestMain(m *testing.M) {
-	configFilePath := "../../app.env"
-
-	if err := godotenv.Load(configFilePath); err != nil {
-		panic(fmt.Sprintf("Error loading configuration file: %v", err))
-	}
-
-	dsn := os.Getenv("TEST_DB_URL")
-
-	var err error
-	testDB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	testConfig, err := initializers.LoadConfig(".")
 	if err != nil {
-		panic(err)
+		log.Printf("Failed to load environment variables: %v\n", err)
+		os.Exit(1) // Exit the test with an error status
 	}
+
+	err = initializers.ConnectDB(&testConfig)
+	if err != nil {
+		log.Printf("Failed to connect to the database: %v\n", err)
+		os.Exit(1) // Exit the test with an error status
+	}
+
+	sqlDB, err := testDB.DB()
+	if err != nil {
+		log.Printf("Failed to get the underlying database connection: %v\n", err)
+		os.Exit(1) // Exit the test with an error status
+	}
+	defer sqlDB.Close() // Close the database connection when tests are done
 
 	code := m.Run()
-
-	sqlDB, _ := testDB.DB()
-	sqlDB.Close()
 
 	os.Exit(code)
 }
