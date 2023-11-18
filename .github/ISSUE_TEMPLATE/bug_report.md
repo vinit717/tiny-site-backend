@@ -1,47 +1,38 @@
-### Bug Description
-
-[Provide a brief description of the bug.]
-
-### Expected Behavior
-
-[Describe what the expected behavior is.]
-
-### Current Behavior
-
-[Explain what is happening currently due to the bug.]
-
-### Screenshots
-
-[If applicable, add screenshots or images that help illustrate the bug]
-
-### Reproducibility
-
--   [ ] This bug is reproducible
--   [ ] This bug is not reproducible
-
-### Steps to Reproduce
-
-1. [Step 1]
-2. [Step 2]
-
-### Severity/Priority
-
--   [ ] Critical
--   [ ] High
--   [ ] Medium
--   [ ] Low
-
-### Additional Information
-
-[Include any additional context, logs, or details that might be helpful in addressing the bug.]
-
-### Checklist
-
--   [ ] I have read and followed the project's code of conduct.
--   [ ] I have searched for similar issues before creating this one.
--   [ ] I have provided all the necessary information to understand and reproduce the bug.
--   [ ] I am willing to contribute to the resolution of this bug.
+---
+name: Bug report
+about: Create a report to help us improve
+title: ''
+labels: ''
+assignees: ''
 
 ---
 
-Thank you for reporting this bug! We appreciate your help in improving our project.
+**Describe the bug**
+A clear and concise description of what the bug is.
+
+**To Reproduce**
+Steps to reproduce the behavior:
+1. Go to '...'
+2. Click on '....'
+3. Scroll down to '....'
+4. See error
+
+**Expected behavior**
+A clear and concise description of what you expected to happen.
+
+**Screenshots**
+If applicable, add screenshots to help explain your problem.
+
+**Desktop (please complete the following information):**
+ - OS: [e.g. iOS]
+ - Browser [e.g. chrome, safari]
+ - Version [e.g. 22]
+
+**Smartphone (please complete the following information):**
+ - Device: [e.g. iPhone6]
+ - OS: [e.g. iOS8.1]
+ - Browser [e.g. stock browser, safari]
+ - Version [e.g. 22]
+
+**Additional context**
+Add any other context about the problem here.
